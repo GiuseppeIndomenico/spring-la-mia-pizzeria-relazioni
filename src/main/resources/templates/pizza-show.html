@@ -14,10 +14,14 @@
 <body class="">
 	<div class="container bg-i min-vh-100" th:object="${pizza}">
 
-		<h1 class="text-danger text-center display-2 fw-bold text-capitalize">[[*{nome}]]</h1>
+		<h1 class="text-danger text-center display-2 fw-bold text-capitalize mb-3">[[*{nome}]]</h1>
 		<div class="d-flex flex-column align-items-center justify-content-center gi-show w-50 m-auto position-relative">
 
-			<em class="fw-bold"><b>ingredienti</b>: [[*{descrizione}]]</em>
+			<em class="fw-bold mb-3"><b>Descrizione</b>: [[*{descrizione}]]</em>
+			<em class="fw-bold"><b>Ingredienti</b>:
+				<span th:each="ingrediente : ${pizza.ingredienti}">[[${ingrediente.nome}]] </span>
+			</em>
+
 			<h6>
 				prezzo: - [[*{prezzo}]] &euro; <br />
 
@@ -41,7 +45,7 @@
 							class="btn btn-warning ms-3"
 							th:href="@{'/pizze/offerta/update/' + ${offertaSpeciale.id}}">Modifica offerta</a>
 
-	
+
 						<a th:unless="${offertaSpeciale != null and offertaSpeciale.id != null}"
 							class="btn btn-success ms-3" th:href="@{'/pizze/offerta/create'}">Crea nuova offerta</a>
 					</div>

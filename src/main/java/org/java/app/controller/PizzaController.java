@@ -2,8 +2,10 @@ package org.java.app.controller;
 
 import java.util.List;
 
+import org.java.app.db.pojo.Ingrediente;
 import org.java.app.db.pojo.OffertaSpeciale;
 import org.java.app.db.pojo.Pizza;
+import org.java.app.db.serv.IngredienteService;
 import org.java.app.db.serv.OffertaSpecialeService;
 import org.java.app.db.serv.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class PizzaController {
 
 	@Autowired
 	private OffertaSpecialeService offertaSpecialeService;
+
+	@Autowired
+	private IngredienteService ingredienteService;
 
 	@GetMapping
 	public String getIndex(Model model) {
@@ -70,6 +75,8 @@ public class PizzaController {
 	@GetMapping("/create")
 	public String getCreateForm(Model model) {
 
+		List<Ingrediente> ingredienti = ingredienteService.findAll();
+		model.addAttribute("ingredienti", ingredienti);
 		model.addAttribute("pizza", new Pizza());
 
 		return "pizza-create";
@@ -104,33 +111,37 @@ public class PizzaController {
 	@GetMapping("/update/{id}")
 	public String getUpdateForm(@PathVariable int id, Model model) {
 		Pizza pizza = pizzaService.findById(id);
+		List<Ingrediente> allIngredienti = ingredienteService.findAll();
+		List<Ingrediente> pizzaIngredienti = pizza.getIngredienti();
+
 		model.addAttribute("pizza", pizza);
+		model.addAttribute("allIngredienti", allIngredienti);
+		model.addAttribute("pizzaIngredienti", pizzaIngredienti);
+
 		return "pizza-update";
 	}
 
 	@PostMapping("/update/{id}")
-	public String updatePizza(@Valid @ModelAttribute Pizza pizza, BindingResult bindingResult, Model model) {
+	public String updatePizza(@Valid @ModelAttribute Pizza updatedPizza, BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {
-
 			return "pizza-update";
 		}
-		pizzaService.save(pizza);
-		return "redirect:/pizze";
-	}
+		Pizza existingPizza = pizzaService.findById(updatedPizza.getId());
 
-	@PostMapping("/delete/{id}")
-	public String deletePizza(@PathVariable int id) {
+		existingPizza.setNome(updatedPizza.getNome());
+		existingPizza.setDescrizione(updatedPizza.getDescrizione());
+		existingPizza.setFoto(updatedPizza.getFoto());
+		existingPizza.setPrezzo(updatedPizza.getPrezzo());
+		existingPizza.setIngredienti(updatedPizza.getIngredienti());
 
-		Pizza pizza = pizzaService.findById(id);
-		pizzaService.deletePizza(pizza);
+		pizzaService.save(existingPizza);
 
 		return "redirect:/pizze";
 	}
 
 	// Offerte
-	
-	
+
 	@GetMapping("/offerta/create")
 	public String getOffertaCreateForm(Model model) {
 		List<Pizza> pizze = pizzaService.findAll();

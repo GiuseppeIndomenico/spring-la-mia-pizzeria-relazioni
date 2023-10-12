@@ -17,13 +17,21 @@
 		<div class="gi-nav shadow fixed-top">
 			<div class="container d-flex align-items-center justify-content-between">
 				<div>
-					<h1 class="text-danger text-center fw-bold">Pizze!</h1>
+					<a th:href="@{/pizze}">
+						<h1 class="text-danger text-center fw-bold">Pizze!</h1>
+
+					</a>
 				</div>
 				<form class="d-flex w-50" action="/pizze/search" method="get">
 					<input class="w-75 me-2 bg-light-subtle" type="text" name="nome"
 						placeholder="cerca la tua pizza preferita">
 					<button class="btn btn-danger fw-bold" type="submit">Cerca</button>
 				</form>
+
+				<div>
+					<a th:href="@{/ingredienti}" class="btn btn-warning fw-bold shadow text-light">vai a ingredienti</a>
+
+				</div>
 			</div>
 		</div>
 		<div class="container d-flex align-items-center justify-content-center">
@@ -57,7 +65,8 @@
 					</tbody>
 				</table>
 				<div class="gi-crea">
-					<a class="fw-bold btn btn-success text-white shadow" th:href="@{/pizze/offerta/create}">Proponi Offerta!
+					<a class="fw-bold btn btn-success text-white shadow" th:href="@{/pizze/offerta/create}">Proponi
+						Offerta!
 						<i class="fa-solid fa-money-bill"></i>
 					</a>
 					<a class="fw-bold btn btn-danger text-white shadow" th:href="@{/pizze/create}">Crea la tua pizza! <i

@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
@@ -34,15 +36,22 @@ public class Pizza {
 	@OneToMany(mappedBy= "pizza")
 	  private List<OffertaSpeciale> offertaSpeciale;
 	
+	@ManyToMany
+	private List<Ingrediente> ingredienti;
+	
 	public Pizza() {
 	}
 
-	public Pizza(String nome, String descrizione, String foto, int prezzo) {
+
+
+	public Pizza(String nome, String descrizione, String foto, int prezzo, Ingrediente... ingredienti) {
 
 		setNome(nome);
 		setDescrizione(descrizione);
 		setFoto(foto);
 		setPrezzo(prezzo);
+		setIngredienti(Arrays.asList(ingredienti));
+		
 
 	}
 
@@ -84,6 +93,14 @@ public class Pizza {
 
 	public void setPrezzo(int prezzo) {
 		this.prezzo = prezzo;
+	}
+	
+	public List<Ingrediente> getIngredienti() {
+		return ingredienti;
+	}
+
+	public void setIngredienti(List<Ingrediente> ingredienti) {
+		this.ingredienti = ingredienti;
 	}
 
 	@Override
